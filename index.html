@@ -10,6 +10,25 @@
     <link rel="manifest" href="images/favicon/site.webmanifest">
     <link rel="shortcut icon" href="images/favicon/favicon.ico">
     <meta name="theme-color" content="#1a1a1a">
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Zampers - Moda feminina Plus Size do 36 ao 64. Desde 1976, 50 anos de tradição em qualidade e confiança. Vendas exclusivas no atacado em Maringá-PR.">
+    <meta name="keywords" content="moda plus size, roupas femininas, atacado, Maringá, tamanhos grandes, 36 ao 64">
+    <meta name="author" content="Zampers">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://zampers.com.br/">
+    <meta property="og:title" content="Zampers - Moda Plus Size | Atacado">
+    <meta property="og:description" content="Os melhores looks Plus Size do 36 ao 64. 50 anos de tradição em qualidade. Vendas no atacado.">
+    <meta property="og:image" content="https://zampers.com.br/images/logo.svg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://zampers.com.br/">
+    <meta property="twitter:title" content="Zampers - Moda Plus Size | Atacado">
+    <meta property="twitter:description" content="Os melhores looks Plus Size do 36 ao 64. 50 anos de tradição em qualidade.">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
@@ -107,11 +126,19 @@
             margin-bottom: 2rem;
         }
 
+        /* Limitar largura do conteúdo textual para melhor legibilidade */
+        .hero .container {
+            max-width: 700px;
+        }
+
         .about-box {
             background-color: #f9fafb;
             border-radius: 0.75rem;
             padding: 1.5rem;
             margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         @media (min-width: 640px) {
