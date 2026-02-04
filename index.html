@@ -434,10 +434,6 @@
                     <span class="store-badge">Loja Oficial</span>
                 </div>
                 <div class="sellers-grid">
-                    <a href="https://wa.me/5544998360379" target="_blank" rel="noopener noreferrer" class="whatsapp-btn">
-                        <svg class="whatsapp-icon"><use href="#whatsapp-icon"/></svg>
-                        Alessandra
-                    </a>
                     <a href="https://wa.me/5544991597384" target="_blank" rel="noopener noreferrer" class="whatsapp-btn">
                         <svg class="whatsapp-icon"><use href="#whatsapp-icon"/></svg>
                         Claudia
@@ -445,6 +441,10 @@
                     <a href="https://wa.me/5544997278048" target="_blank" rel="noopener noreferrer" class="whatsapp-btn">
                         <svg class="whatsapp-icon"><use href="#whatsapp-icon"/></svg>
                         Juliana
+                    </a>
+                    <a href="https://wa.me/5544998360379" target="_blank" rel="noopener noreferrer" class="whatsapp-btn">
+                        <svg class="whatsapp-icon"><use href="#whatsapp-icon"/></svg>
+                        Margarete
                     </a>
                     <a href="https://wa.me/5544991553205" target="_blank" rel="noopener noreferrer" class="whatsapp-btn">
                         <svg class="whatsapp-icon"><use href="#whatsapp-icon"/></svg>
@@ -530,5 +530,13 @@
             <p class="copyright">Vendas somente no atacado • Fale com nossas vendedoras pelo WhatsApp</p>
         </div>
     </footer>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const blocks = document.querySelectorAll('.store-block');
+        if (blocks.length >= 2 && Math.random() > 0.5) {
+            blocks[0].parentNode.insertBefore(blocks[1], blocks[0]);
+        }
+    });
+    </script>
 </body>
 </html>
