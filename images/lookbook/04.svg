@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2100 900" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <pattern id="g4" width="10" height="10" patternUnits="userSpaceOnUse">
+      <rect width="10" height="10" fill="#ECE3D4"/>
+      <circle cx="5" cy="5" r="0.5" fill="#1A1814" opacity="0.18"/>
+    </pattern>
+  </defs>
+  <rect width="2100" height="900" fill="url(#g4)"/>
+  <g fill="#1A1814" font-family="Georgia, serif">
+    <text x="60" y="70" font-size="16" letter-spacing="3" font-family="monospace" opacity="0.55">FIG. IV — BASTIDOR</text>
+    <text x="1050" y="450" text-anchor="middle" font-size="68" font-style="italic" opacity="0.35">Foto · 21:9</text>
+    <text x="1050" y="495" text-anchor="middle" font-size="14" letter-spacing="2" font-family="monospace" opacity="0.45">LOJA, ATELIER OU EQUIPE — FORMATO PANORÂMICO</text>
+    <text x="1050" y="525" text-anchor="middle" font-size="13" font-family="monospace" opacity="0.4">recomendado: 2100 × 900 px</text>
+  </g>
+</svg>

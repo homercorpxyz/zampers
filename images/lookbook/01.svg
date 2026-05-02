@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <pattern id="g1" width="10" height="10" patternUnits="userSpaceOnUse">
+      <rect width="10" height="10" fill="#ECE3D4"/>
+      <circle cx="5" cy="5" r="0.5" fill="#1A1814" opacity="0.18"/>
+    </pattern>
+  </defs>
+  <rect width="800" height="1000" fill="url(#g1)"/>
+  <g fill="#1A1814" font-family="Georgia, serif">
+    <text x="50" y="80" font-size="14" letter-spacing="3" font-family="monospace" opacity="0.55">FIG. I — RETRATO PRINCIPAL</text>
+    <text x="400" y="510" text-anchor="middle" font-size="60" font-style="italic" opacity="0.35">Foto · 4:5</text>
+    <text x="400" y="555" text-anchor="middle" font-size="13" letter-spacing="2" font-family="monospace" opacity="0.45">SUBSTITUIR POR LOOK PRINCIPAL</text>
+    <text x="400" y="585" text-anchor="middle" font-size="13" font-family="monospace" opacity="0.4">recomendado: 1200 × 1500 px</text>
+  </g>
+</svg>
