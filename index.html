@@ -1258,5 +1258,17 @@
             }
         });
     </script>
+
+    <!-- Meta Pixel: Contact event on WhatsApp seller clicks -->
+    <script>
+        document.addEventListener('click', function(e) {
+            var link = e.target.closest('a.seller');
+            if (!link) return;
+            var seller = link.dataset.seller || 'unknown';
+            if (typeof fbq === 'function') {
+                fbq('track', 'Contact', { content_name: seller });
+            }
+        });
+    </script>
 </body>
 </html>
