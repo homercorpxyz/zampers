@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#0A1F4D">
+<meta name="robots" content="noindex,nofollow">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Contagem">
+<title>Contagem — Feirão Astorga</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧮</text></svg>">
+<style>
+:root{
+  --navy:#0A1F4D; --navy-lite:#16346F;
+  --red:#D81F26; --red-dk:#9E1218;
+  --cream:#F4F1E8; --white:#fff;
+  --gold:#FFC72C;
+  --ink:#0A1F4D;
+  --shadow:6px 6px 0 rgba(0,0,0,.35);
+  --shadow-sm:3px 3px 0 rgba(0,0,0,.3);
+  --cond: "Helvetica Neue Condensed","HelveticaNeue-CondensedBold","Arial Narrow",
+          ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --body: ui-sans-serif,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  font-family:var(--body); background:var(--navy); color:var(--cream);
+  -webkit-user-select:none;user-select:none; touch-action:manipulation;
+  overflow:hidden; overscroll-behavior:none;
+  background-image:
+    repeating-linear-gradient(115deg,rgba(255,255,255,.035) 0 2px,transparent 2px 9px),
+    radial-gradient(120% 80% at 50% -10%,#1B3F8F 0%,var(--navy) 60%);
+}
+body::after{
+  content:"";position:fixed;inset:0;pointer-events:none;opacity:.28;z-index:99;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+  mix-blend-mode:overlay;
+}
+.app{height:100%;height:100dvh;display:flex;flex-direction:column;padding:10px;gap:10px;max-width:1200px;margin:0 auto;
+  padding-bottom:max(10px,env(safe-area-inset-bottom))}
+
+/* ---------- header ---------- */
+header{
+  display:flex;align-items:stretch;gap:10px;flex-wrap:wrap;
+  background:var(--cream);color:var(--ink);
+  border:3px solid #000;box-shadow:var(--shadow);
+  padding:10px 12px;position:relative;overflow:hidden;flex:none;
+}
+header::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(74deg,rgba(216,31,38,.10) 0 10px,transparent 10px 34px);
+}
+.brand{display:flex;flex-direction:column;justify-content:center;min-width:150px;flex:1;position:relative}
+.brand h1{
+  font-family:var(--cond);font-weight:800;font-stretch:condensed;
+  font-size:clamp(19px,3.4vw,29px);line-height:.94;letter-spacing:-.01em;text-transform:uppercase;
+}
+.brand h1 em{color:var(--red);font-style:normal}
+.brand p{font-size:12px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;opacity:.62;margin-top:3px}
+.days{display:flex;gap:6px;align-items:center;position:relative}
+.day{
+  font-family:var(--cond);font-weight:800;font-stretch:condensed;font-size:15px;
+  padding:9px 13px;border:3px solid #000;background:var(--white);color:var(--ink);
+  box-shadow:var(--shadow-sm);cursor:pointer;line-height:1;text-transform:uppercase;
+}
+.day[aria-pressed="true"]{background:var(--navy);color:var(--gold);box-shadow:none;transform:translate(3px,3px)}
+.day.lk::after{content:"🔒";font-size:10px;margin-left:5px;opacity:.65}
+.lockchip{position:absolute;right:6px;top:5px;font-size:9px;font-weight:800;letter-spacing:.1em;
+  text-transform:uppercase;opacity:.45;z-index:2}
+
+/* ---------- pinpad ---------- */
+.pinbox{max-width:330px;margin:6vh auto 0;background:var(--cream);color:var(--ink);
+  border:3px solid #000;box-shadow:var(--shadow);padding:18px;text-align:center}
+.pinbox h2{font-family:var(--cond);font-weight:800;font-stretch:condensed;font-size:24px;text-transform:uppercase;line-height:1}
+.pinbox p{font-size:13px;font-weight:700;margin-top:6px;opacity:.7}
+.dots{display:flex;gap:11px;justify-content:center;margin:18px 0}
+.dots i{width:17px;height:17px;border:3px solid #000;background:var(--white);display:block}
+.dots i.f{background:var(--red)}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pad button{font-family:var(--cond);font-weight:800;font-size:26px;padding:15px 0;
+  border:3px solid #000;background:var(--white);color:var(--ink);box-shadow:var(--shadow-sm);
+  cursor:pointer;line-height:1;transition:transform .06s,box-shadow .06s}
+.pad button:active{transform:translate(3px,3px);box-shadow:none}
+.pad button.wide{grid-column:span 2}
+.pinbox .btn{width:100%;margin-top:12px;background:var(--navy);color:var(--cream)}
+.tot{
+  display:flex;flex-direction:column;justify-content:center;align-items:flex-end;
+  padding-left:12px;border-left:3px solid #000;min-width:112px;position:relative
+}
+.tot b{font-family:var(--cond);font-weight:800;font-size:clamp(30px,6vw,48px);line-height:.85;font-variant-numeric:tabular-nums;color:var(--red)}
+.tot span{font-size:10px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;opacity:.6}
+
+/* ---------- ask strip ---------- */
+.ask{
+  flex:none;background:var(--gold);color:#000;border:3px solid #000;box-shadow:var(--shadow-sm);
+  padding:7px 12px;font-family:var(--cond);font-weight:800;font-stretch:condensed;
+  font-size:clamp(14px,2.5vw,19px);text-transform:uppercase;letter-spacing:.01em;text-align:center;
+}
+
+/* ---------- grid ---------- */
+.grid{
+  flex:1;display:grid;gap:9px;min-height:0;
+  grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(4,1fr);
+}
+@media(min-width:760px){.grid{grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,1fr)}}
+.k{
+  position:relative;display:flex;flex-direction:column;justify-content:space-between;
+  background:var(--cream);color:var(--ink);border:3px solid #000;box-shadow:var(--shadow);
+  padding:9px 10px;cursor:pointer;overflow:hidden;transition:transform .07s,box-shadow .07s;
+  text-align:left;font:inherit;
+}
+.k::before{content:"";position:absolute;left:0;top:0;bottom:0;width:9px;background:var(--c)}
+.k:active,.k.hit{transform:translate(6px,6px);box-shadow:0 0 0 rgba(0,0,0,0)}
+.k .lbl{
+  font-family:var(--cond);font-weight:800;font-stretch:condensed;
+  font-size:clamp(13px,2.4vw,19px);line-height:1.02;text-transform:uppercase;
+  padding-left:9px;letter-spacing:.005em;
+}
+.k .n{
+  font-family:var(--cond);font-weight:800;font-variant-numeric:tabular-nums;
+  font-size:clamp(40px,9vw,74px);line-height:.8;align-self:flex-end;color:var(--c);
+  transition:transform .1s;
+}
+.k.hit .n{transform:scale(1.16)}
+.k[data-zero="1"] .n{color:#B9B3A4}
+
+/* ---------- footer ---------- */
+footer{flex:none;display:flex;gap:9px}
+.btn{
+  flex:1;font-family:var(--cond);font-weight:800;font-stretch:condensed;
+  font-size:clamp(14px,2.6vw,20px);text-transform:uppercase;letter-spacing:.02em;
+  padding:13px 10px;border:3px solid #000;box-shadow:var(--shadow-sm);cursor:pointer;
+  background:var(--white);color:var(--ink);line-height:1.05;
+  transition:transform .07s,box-shadow .07s;
+}
+.btn:active{transform:translate(3px,3px);box-shadow:none}
+.btn.undo{background:var(--red);color:#fff;flex:1.35;position:relative;overflow:hidden}
+.btn.undo:disabled{background:#5C6A8A;color:#A9B4CB;box-shadow:none;transform:none;cursor:default}
+.btn.undo small{display:block;font-size:11px;font-weight:700;opacity:.9;letter-spacing:.04em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;position:relative;z-index:1}
+.btn.undo span{position:relative;z-index:1}
+.ubar{position:absolute;left:0;bottom:0;height:6px;width:0;background:var(--gold);
+  border-top:2px solid #000;transition:width .1s linear}
+@keyframes shk{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.shake{animation:shk .22s}
+
+/* ---------- modal ---------- */
+.veil{position:fixed;inset:0;background:rgba(5,14,36,.9);display:none;z-index:100;padding:14px;overflow:auto}
+.veil.on{display:block}
+.sheet{
+  max-width:640px;margin:0 auto;background:var(--cream);color:var(--ink);
+  border:3px solid #000;box-shadow:var(--shadow);padding:18px;
+}
+.sheet h2{font-family:var(--cond);font-weight:800;font-stretch:condensed;font-size:26px;text-transform:uppercase;line-height:1}
+.sheet h3{font-family:var(--cond);font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:.11em;
+  margin:18px 0 7px;padding-bottom:5px;border-bottom:3px solid #000;opacity:.75}
+.row{display:flex;align-items:center;gap:9px;padding:5px 0;font-size:15px}
+.row .rl{flex:none;width:38%;font-weight:700}
+.row .rb{flex:1;height:15px;background:#DED9CB;border:2px solid #000;position:relative}
+.row .rb i{position:absolute;inset:0 auto 0 0;background:var(--c);display:block}
+.row .rn{flex:none;width:66px;text-align:right;font-weight:800;font-variant-numeric:tabular-nums}
+.hrs{display:flex;align-items:flex-end;gap:3px;height:88px;border-bottom:3px solid #000;padding-top:6px}
+.hr{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:3px;min-width:0}
+.hr i{width:100%;background:var(--navy);border:2px solid #000;border-bottom:0;display:block;min-height:2px}
+.hr b{font-size:10px;font-weight:800;font-variant-numeric:tabular-nums}
+.hr span{font-size:9px;opacity:.6;font-weight:700}
+.fld{margin-top:12px}
+.fld label{display:block;font-size:11px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;opacity:.66;margin-bottom:4px}
+.fld input,.fld textarea{
+  width:100%;font:inherit;font-size:16px;padding:9px;border:3px solid #000;background:var(--white);
+  color:var(--ink);-webkit-user-select:text;user-select:text;resize:vertical;
+}
+.acts{display:flex;gap:9px;margin-top:16px;flex-wrap:wrap}
+.acts .btn{flex:1;min-width:118px}
+.acts .btn.dark{background:var(--navy);color:var(--cream)}
+.mini{font-size:11px;line-height:1.5;opacity:.62;margin-top:12px;font-weight:600}
+.mini a{color:var(--red);font-weight:800}
+.empty{padding:22px 0;font-weight:700;opacity:.6;text-align:center}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header>
+    <div class="brand">
+      <h1>Feirão <em>Astorga</em> · Contagem</h1>
+      <p id="stamp">—</p>
+    </div>
+    <div class="days" id="days"></div>
+    <b class="lockchip" id="lockchip"></b>
+    <div class="tot"><b id="total">0</b><span>clientes</span></div>
+  </header>
+
+  <div class="ask">“Como ficou sabendo do feirão?”</div>
+
+  <div class="grid" id="grid"></div>
+
+  <footer>
+    <button class="btn undo" id="undo" disabled><span>Desfazer</span><small id="undoWhat">nada ainda</small><i class="ubar" id="ubar"></i></button>
+    <button class="btn" id="open">Ver resumo</button>
+  </footer>
+</div>
+
+<div class="veil" id="pinVeil">
+  <div class="pinbox">
+    <h2>Área restrita</h2>
+    <p>Digite a senha para <b id="pinFor">continuar</b></p>
+    <div class="dots" id="dots"><i></i><i></i><i></i><i></i></div>
+    <div class="pad" id="pad"></div>
+    <button class="btn" id="pinCancel">Cancelar</button>
+  </div>
+</div>
+
+<div class="veil" id="veil">
+  <div class="sheet">
+    <h2 id="sTitle">Resumo</h2>
+    <h3>Por canal</h3>
+    <div id="sRows"></div>
+    <h3>Movimento por hora</h3>
+    <div id="sHours"></div>
+    <div class="fld"><label for="fat">Faturamento do dia (R$)</label><input id="fat" inputmode="decimal" placeholder="0,00"></div>
+    <div class="fld"><label for="obs">Observações — o que acabou, que tamanho faltou, reclamações</label><textarea id="obs" rows="3"></textarea></div>
+    <h3>Enviar o resultado</h3>
+    <div class="acts">
+      <button class="btn dark" id="share">Enviar…</button>
+      <button class="btn dark" id="mail">E-mail</button>
+      <button class="btn dark" id="dl">Salvar .txt</button>
+      <button class="btn" id="copy">Copiar</button>
+    </div>
+    <p class="mini"><a href="#" id="dlAll">Baixar os três dias num arquivo só</a> — use no fim do sábado.</p>
+
+    <h3>Encerrar</h3>
+    <div class="acts">
+      <button class="btn" id="close">Voltar</button>
+      <button class="btn" id="lock">Trancar</button>
+      <button class="btn" id="reset" style="background:#E8E2D2">Zerar dia</button>
+    </div>
+    <p class="mini">Os dados ficam gravados <b>só neste tablet</b>, sem internet e sem sincronizar. Envie o resultado para o Ronei ao fim de cada dia — se o navegador for limpo, não há como recuperar.</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var CH=[
+    {id:"instagram", l:"Instagram",        c:"#C13584"},
+    {id:"facebook",  l:"Facebook",         c:"#1877F2"},
+    {id:"whatsapp",  l:"WhatsApp da loja", c:"#128C4A"},
+    {id:"grupo",     l:"Grupo de compra e venda", c:"#0A1F4D"},
+    {id:"carro",     l:"Carro de som",     c:"#D81F26"},
+    {id:"frente",    l:"Passou na frente", c:"#B8860B"},
+    {id:"indicacao", l:"Indicação",        c:"#6A2E9E"},
+    {id:"naosabe",   l:"Não soube dizer",  c:"#6E6A60"}
+  ];
+  var DAYS=[{k:"2026-08-06",l:"Qui 06"},{k:"2026-08-07",l:"Sex 07"},{k:"2026-08-08",l:"Sáb 08"}];
+  var KEY="feirao-astorga-v1", db=load(), day=pickDay();
+
+  function load(){ try{ return JSON.parse(localStorage.getItem(KEY))||{} }catch(e){ return {} } }
+  function save(){ try{ localStorage.setItem(KEY,JSON.stringify(db)) }catch(e){} }
+  function pickDay(){
+    var t=new Date(), p=t.getFullYear()+"-"+pad(t.getMonth()+1)+"-"+pad(t.getDate());
+    for(var i=0;i<DAYS.length;i++) if(DAYS[i].k===p) return p;
+    return DAYS[0].k;
+  }
+  function pad(n){ return (n<10?"0":"")+n }
+  function rec(){ if(!db[day]) db[day]={ev:[],fat:"",obs:""}; return db[day] }
+  function counts(){
+    var m={},e=rec().ev,i;
+    for(i=0;i<CH.length;i++) m[CH[i].id]=0;
+    for(i=0;i<e.length;i++) if(m[e[i].c]!==undefined) m[e[i].c]++;
+    return m;
+  }
+  function label(id){ for(var i=0;i<CH.length;i++) if(CH[i].id===id) return CH[i].l; return id }
+  function dayLabel(k){ for(var i=0;i<DAYS.length;i++) if(DAYS[i].k===k) return DAYS[i].l; return k }
+
+  /* ----- build ----- */
+  var $=function(s){ return document.querySelector(s) };
+  var grid=$("#grid"), daysEl=$("#days");
+
+  /* ----- cadeado local -----
+     Protege o que estraga dado (trocar de dia, zerar) e o que é sensível
+     (faturamento). As teclas de contagem seguem livres — é o que a pessoa
+     do caixa usa o tempo todo.
+     NÃO é segurança de verdade: a senha está no código da página. Serve para
+     impedir toque acidental e curiosidade, que é o risco real aqui. */
+  var PIN="1976", UNLOCK_MS=180000, unlockedAt=0, pending=null, buf="";
+
+  function locked(){ return (Date.now()-unlockedAt) > UNLOCK_MS }
+  function gate(action,what){
+    if(!locked()){ unlockedAt=Date.now(); action(); return }
+    pending=action; buf="";
+    $("#pinFor").textContent=what; dots(); $("#pinVeil").classList.add("on");
+  }
+  function dots(){
+    var d=$("#dots").children;
+    for(var i=0;i<4;i++) d[i].className = i<buf.length ? "f" : "";
+  }
+  function feed(v){
+    if(v==="del"){ buf=buf.slice(0,-1); dots(); return }
+    if(buf.length>=4) return;
+    buf+=v; dots();
+    if(buf.length===4) setTimeout(check,120);
+  }
+  function check(){
+    if(buf===PIN){
+      unlockedAt=Date.now(); $("#pinVeil").classList.remove("on");
+      lockUI(); var a=pending; pending=null; if(a) a();
+    }else{
+      var b=$(".pinbox"); b.classList.remove("shake"); void b.offsetWidth; b.classList.add("shake");
+      buf=""; dots();
+    }
+  }
+  (function(){
+    var keys=["1","2","3","4","5","6","7","8","9","del","0"];
+    keys.forEach(function(k){
+      var b=document.createElement("button");
+      b.textContent = k==="del" ? "⌫" : k;
+      if(k==="0") b.className="wide";
+      b.onclick=function(){ feed(k) };
+      $("#pad").appendChild(b);
+    });
+  })();
+  $("#pinCancel").onclick=function(){ pending=null; buf=""; dots(); $("#pinVeil").classList.remove("on") };
+
+  function lockUI(){
+    var lk=locked(), i;
+    for(i=0;i<daysEl.children.length;i++) daysEl.children[i].classList.toggle("lk",lk);
+    $("#lockchip").textContent = lk ? "" : "destrancado";
+  }
+  setInterval(lockUI,5000);
+
+  DAYS.forEach(function(d){
+    var b=document.createElement("button");
+    b.className="day"; b.textContent=d.l; b.setAttribute("aria-pressed", d.k===day);
+    b.onclick=function(){ gate(function(){ day=d.k; render(); armUndo() },"trocar para "+d.l) };
+    daysEl.appendChild(b);
+  });
+
+  CH.forEach(function(ch){
+    var b=document.createElement("button");
+    b.className="k"; b.style.setProperty("--c",ch.c); b.dataset.id=ch.id;
+    b.innerHTML='<div class="lbl">'+ch.l+'</div><div class="n">0</div>';
+    b.addEventListener("click",function(){ tap(ch.id,b) });
+    grid.appendChild(b);
+  });
+
+  function tap(id,el){
+    rec().ev.push({c:id,t:Date.now()}); save(); render(); armUndo();
+    el.classList.add("hit");
+    setTimeout(function(){ el.classList.remove("hit") },130);
+    if(navigator.vibrate) navigator.vibrate(14);
+  }
+
+  /* Janela de desfazer: só vale para o toque recém-dado. Depois disso o botão
+     morre, senão daria para apagar um registro legítimo horas depois. */
+  var UNDO_MS=8000, undoTimer=null;
+
+  function undoable(){
+    var e=rec().ev;
+    if(!e.length) return null;
+    var last=e[e.length-1];
+    return (Date.now()-last.t) < UNDO_MS ? last : null;
+  }
+
+  function undoTick(){
+    var u=$("#undo"), bar=$("#ubar"), e=rec().ev, last=undoable();
+    if(last){
+      u.disabled=false;
+      $("#undoWhat").textContent=label(last.c);
+      bar.style.width=Math.max(0,(UNDO_MS-(Date.now()-last.t))/UNDO_MS*100)+"%";
+    }else{
+      u.disabled=true;
+      $("#undoWhat").textContent = e.length ? "registro confirmado" : "nada ainda";
+      bar.style.width="0%";
+      if(undoTimer){ clearInterval(undoTimer); undoTimer=null }
+    }
+  }
+
+  function armUndo(){
+    if(undoTimer) clearInterval(undoTimer);
+    undoTick();
+    if(undoable()) undoTimer=setInterval(undoTick,100);
+  }
+
+  $("#undo").onclick=function(){
+    if(!undoable()) return;
+    rec().ev.pop(); save(); render(); armUndo();
+    this.classList.remove("shake"); void this.offsetWidth; this.classList.add("shake");
+  };
+
+  function render(){
+    var c=counts(), e=rec().ev, i;
+    for(i=0;i<DAYS.length;i++) daysEl.children[i].setAttribute("aria-pressed", DAYS[i].k===day);
+    for(i=0;i<CH.length;i++){
+      var k=grid.children[i];
+      k.querySelector(".n").textContent=c[CH[i].id];
+      k.dataset.zero = c[CH[i].id]===0 ? "1" : "0";
+    }
+    $("#total").textContent=e.length;
+    $("#stamp").textContent=dayLabel(day)+" de agosto · "+e.length+" registro"+(e.length===1?"":"s");
+    undoTick();
+  }
+
+  /* ----- summary ----- */
+  $("#open").onclick=function(){
+    gate(function(){ fill(); $("#veil").classList.add("on") },"ver o resumo");
+  };
+  $("#close").onclick=function(){ store(); $("#veil").classList.remove("on"); lockUI() };
+  $("#lock").onclick=function(){ store(); unlockedAt=0; lockUI(); $("#veil").classList.remove("on") };
+  function store(){ rec().fat=$("#fat").value; rec().obs=$("#obs").value; save() }
+
+  function fill(){
+    var c=counts(), e=rec().ev, tot=e.length, i;
+    $("#sTitle").textContent="Resumo · "+dayLabel(day)+" de agosto";
+    var sorted=CH.slice().sort(function(a,b){ return c[b.id]-c[a.id] });
+    var h="";
+    if(!tot){ h='<p class="empty">Nenhum registro ainda neste dia.</p>' }
+    else sorted.forEach(function(ch){
+      var n=c[ch.id], p=tot? Math.round(n/tot*100):0;
+      h+='<div class="row" style="--c:'+ch.c+'"><div class="rl">'+ch.l+'</div>'+
+         '<div class="rb"><i style="width:'+p+'%"></i></div>'+
+         '<div class="rn">'+n+' · '+p+'%</div></div>';
+    });
+    $("#sRows").innerHTML=h;
+
+    var hrs={},mx=0;
+    for(i=0;i<e.length;i++){ var hh=new Date(e[i].t).getHours(); hrs[hh]=(hrs[hh]||0)+1; if(hrs[hh]>mx) mx=hrs[hh] }
+    var ks=Object.keys(hrs).sort(function(a,b){return a-b}), hh2="";
+    if(!ks.length){ hh2='<p class="empty">Sem dados de horário ainda.</p>' }
+    else{
+      hh2='<div class="hrs">';
+      ks.forEach(function(k){
+        hh2+='<div class="hr"><b>'+hrs[k]+'</b><i style="height:'+Math.max(4,hrs[k]/mx*54)+'px"></i><span>'+k+'h</span></div>';
+      });
+      hh2+='</div>';
+    }
+    $("#sHours").innerHTML=hh2;
+    $("#fat").value=rec().fat||""; $("#obs").value=rec().obs||"";
+  }
+
+  /* ----- exportação -----
+     Destinatário padrão do e-mail. Deixe "" para abrir com o campo Para vazio.
+     Montado em pedaços de propósito: a página é pública e endereço em texto
+     puro no código vira alvo de robô de spam. */
+  var MAIL_TO = "";
+
+  function buildDay(k){
+    var r=db[k]||{ev:[],fat:"",obs:""}, e=r.ev, tot=e.length, i;
+    var c={}; for(i=0;i<CH.length;i++) c[CH[i].id]=0;
+    for(i=0;i<e.length;i++) if(c[e[i].c]!==undefined) c[e[i].c]++;
+    var t="FEIRAO ASTORGA — "+dayLabel(k)+" de agosto de 2026\n";
+    t+="Total de clientes: "+tot+"\n";
+    if(tot){
+      t+="\nCOMO FICOU SABENDO:\n";
+      CH.slice().sort(function(a,b){return c[b.id]-c[a.id]}).forEach(function(ch){
+        if(c[ch.id]) t+="  "+ch.l+": "+c[ch.id]+" ("+Math.round(c[ch.id]/tot*100)+"%)\n";
+      });
+      var hrs={};
+      for(i=0;i<e.length;i++){ var hh=new Date(e[i].t).getHours(); hrs[hh]=(hrs[hh]||0)+1 }
+      var ks=Object.keys(hrs).sort(function(a,b){return a-b});
+      if(ks.length){
+        t+="\nMOVIMENTO POR HORA:\n";
+        ks.forEach(function(x){ t+="  "+x+"h: "+hrs[x]+"\n" });
+      }
+    }
+    if(r.fat) t+="\nFaturamento: R$ "+r.fat;
+    if(r.obs) t+="\nObservacoes: "+r.obs;
+    return t+"\n";
+  }
+  function buildAll(){
+    var t="FEIRAO ASTORGA — RESULTADO DOS 3 DIAS\n"+
+          "======================================\n\n", g=0;
+    DAYS.forEach(function(d){ t+=buildDay(d.k)+"\n--------------------------------------\n\n";
+      g+=((db[d.k]||{ev:[]}).ev||[]).length; });
+    return t+"TOTAL GERAL DE CLIENTES: "+g+"\n";
+  }
+  function fileName(k){ return "feirao-astorga-"+(k||"3dias")+".txt" }
+
+  function download(text,name){
+    try{
+      var b=new Blob([text],{type:"text/plain;charset=utf-8"});
+      var u=URL.createObjectURL(b), a=document.createElement("a");
+      a.href=u; a.download=name; document.body.appendChild(a); a.click();
+      setTimeout(function(){ document.body.removeChild(a); URL.revokeObjectURL(u) },400);
+    }catch(err){ alert("Não foi possível salvar o arquivo. Use Copiar.") }
+  }
+  function flash(btn,msg){
+    var o=btn.textContent; btn.textContent=msg;
+    setTimeout(function(){ btn.textContent=o },1700);
+  }
+
+  $("#copy").onclick=function(){
+    store(); var t=buildDay(day), b=this;
+    var done=function(){ flash(b,"Copiado!") };
+    if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(t).then(done,function(){ leg(t,done) }) }
+    else leg(t,done);
+  };
+  /* Fallback de cópia. No Safari do iPad, textarea.select() sozinho não basta:
+     é preciso contentEditable + Range + setSelectionRange. */
+  function leg(t,cb){
+    var a=document.createElement("textarea");
+    a.value=t; a.contentEditable="true"; a.readOnly=false;
+    a.style.cssText="position:fixed;top:0;left:0;opacity:0;font-size:16px";
+    document.body.appendChild(a);
+    try{
+      var r=document.createRange(); r.selectNodeContents(a);
+      var s=window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      a.setSelectionRange(0,999999);
+      document.execCommand("copy"); cb();
+    }catch(e){ alert(t) }
+    document.body.removeChild(a);
+  }
+
+  $("#dl").onclick=function(){ store(); download(buildDay(day),fileName(day)); flash(this,"Salvo!") };
+  $("#dlAll").onclick=function(ev){ ev.preventDefault(); store(); download(buildAll(),fileName()) };
+
+  $("#mail").onclick=function(){
+    store();
+    var sub="Feirão Astorga — "+dayLabel(day)+" de agosto";
+    window.location.href="mailto:"+encodeURIComponent(MAIL_TO)+
+      "?subject="+encodeURIComponent(sub)+"&body="+encodeURIComponent(buildDay(day));
+  };
+
+  /* Web Share abre a folha nativa do tablet (WhatsApp, e-mail, Arquivos, Notas).
+     Só existe em HTTPS — some quando aberto por file://. */
+  if(navigator.share){
+    $("#share").onclick=function(){
+      store();
+      navigator.share({title:"Feirão Astorga",text:buildDay(day)}).catch(function(){});
+    };
+  }else{
+    $("#share").style.display="none";
+  }
+
+  $("#reset").onclick=function(){
+    if(!confirm("Apagar TODOS os registros de "+dayLabel(day)+"? Não dá para desfazer.")) return;
+    db[day]={ev:[],fat:"",obs:""}; save(); render(); fill();
+  };
+
+  /* beforeunload é pouco confiável no Safari do iOS. visibilitychange e pagehide
+     disparam de verdade quando o app vai para segundo plano. */
+  window.addEventListener("beforeunload",store);
+  window.addEventListener("pagehide",store);
+  document.addEventListener("visibilitychange",function(){ if(document.hidden) store() });
+  $("#fat").addEventListener("blur",store);
+  $("#obs").addEventListener("blur",store);
+  document.addEventListener("gesturestart",function(e){ e.preventDefault() });
+  render(); armUndo(); lockUI();
+})();
+</script>
+</body>
+</html>
