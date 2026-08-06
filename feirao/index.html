@@ -126,6 +126,14 @@ header::before{
 }
 .k.hit .n{transform:scale(1.16)}
 .k[data-zero="1"] .n{color:#B9B3A4}
+/* Com o app trancado, NENHUM número aparece. Não é sigilo: é evitar que quem
+   pergunta veja a contagem parcial e enviese a próxima resposta. */
+body.locked .k .n{visibility:hidden}
+.plus{position:absolute;right:11px;bottom:9px;font-family:var(--cond);font-weight:800;
+  font-size:clamp(26px,6vw,44px);line-height:.8;color:var(--c);opacity:0;pointer-events:none}
+@keyframes pop{0%{opacity:0;transform:translateY(8px)}22%{opacity:1;transform:translateY(0)}
+  100%{opacity:0;transform:translateY(-12px)}}
+body.locked .k.hit .plus{animation:pop .8s ease-out}
 
 /* ---------- footer ---------- */
 footer{flex:none;display:flex;gap:9px}
@@ -329,6 +337,8 @@ footer{flex:none;display:flex;gap:9px}
     var lk=locked(), i;
     for(i=0;i<daysEl.children.length;i++) daysEl.children[i].classList.toggle("lk",lk);
     $("#lockchip").textContent = lk ? "" : "destrancado";
+    document.body.classList.toggle("locked",lk);
+    render();
   }
   setInterval(lockUI,5000);
 
@@ -342,7 +352,7 @@ footer{flex:none;display:flex;gap:9px}
   CH.forEach(function(ch){
     var b=document.createElement("button");
     b.className="k"; b.style.setProperty("--c",ch.c); b.dataset.id=ch.id;
-    b.innerHTML='<div class="lbl">'+ch.l+'</div><div class="n">0</div>';
+    b.innerHTML='<div class="lbl">'+ch.l+'</div><div class="n">0</div><b class="plus">+1</b>';
     b.addEventListener("click",function(){ tap(ch.id,b) });
     grid.appendChild(b);
   });
@@ -399,8 +409,10 @@ footer{flex:none;display:flex;gap:9px}
       k.querySelector(".n").textContent=c[CH[i].id];
       k.dataset.zero = c[CH[i].id]===0 ? "1" : "0";
     }
-    $("#total").textContent=e.length;
-    $("#stamp").textContent=dayLabel(day)+" de agosto · "+e.length+" registro"+(e.length===1?"":"s");
+    var lk=locked();
+    $("#total").textContent = lk ? "•••" : e.length;
+    $("#stamp").textContent = lk ? dayLabel(day)+" de agosto"
+                                 : dayLabel(day)+" de agosto · "+e.length+" registro"+(e.length===1?"":"s");
     undoTick();
   }
 
